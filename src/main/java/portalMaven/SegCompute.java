@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import com.chenlb.mmseg4j.Dictionary;
 import com.chenlb.mmseg4j.MMSeg;
@@ -24,11 +25,17 @@ public class SegCompute {
 			for(String txt : strs){
 				MMSeg mmSeg = new MMSeg(new StringReader(txt), seg);
 				Word word = null;
-				writer.write(txt + "|");
+				ArrayList<Word> words = new ArrayList<Word>();
 				while ((word = mmSeg.next()) != null) {
-					if (word != null) {
-						writer.write(word + "|");
-					}
+					words.add(word);
+				}
+				writer.write(txt + "|");
+				if(words.size()<2){
+					writer.write("\n");
+					continue;
+				}
+				for(Word w : words){
+					writer.write(w + "|");
 				}
 				writer.write("\n");
 			}
